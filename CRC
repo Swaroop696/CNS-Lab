@@ -1,0 +1,76 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+class CRC{
+	static int[] computecrc(int gen[], int message[]){
+		int current = 0;
+
+		while(true){
+			for(int i = 0; i < gen.length; i++){
+				message[current + i] = message[current + i] ^ gen[i];
+			}
+			while(message[current] == 0 && current != message.length - 1){
+				current++;
+			}
+			if((message.length - current) < gen.length){
+				break;
+			}
+		}
+		return message;
+	}
+
+	static int[] toIntArr(String[] arr){
+		int [] intArr = new int [arr.length];
+
+		for(int i = 0; i < arr.length; i++) {
+			intArr[i] = Integer.parseInt(arr[i]);
+		}
+		return intArr;
+	}
+
+	public static void main(String[] args){
+		Scanner in = new Scanner(System.in);
+
+		System.out.print("\nEnter a message: ");
+		int[] message = toIntArr(in.next().split(""));
+
+		System.out.print("Enter a generator: ");
+		int[] gen = toIntArr(in.next().split(""));
+
+		int j,  totalBits = (message.length + gen.length) - 1;
+		int[] transmittedMessage = new int[totalBits];
+		int[] appendedMessage = Arrays.copyOf(message, totalBits);
+
+		System.out.print("Appended message: ");
+		for(int x: appendedMessage){
+			System.out.print(x);
+		}
+		System.out.println();
+
+		int[] rem = computecrc(gen, appendedMessage.clone());
+		for(int i = 0; i < appendedMessage.length; i++){
+			transmittedMessage[i] = appendedMessage[i] ^ rem[i];
+		}
+
+		System.out.print("Transmitted message: ");
+		for(int x: transmittedMessage){
+			System.out.print(x);
+		}
+		System.out.println();
+
+		System.out.print("\nEnter the " + totalBits + " bit message received at the receiver: ");
+		transmittedMessage = toIntArr(in.next().split(""));
+		rem = computecrc(gen, transmittedMessage);
+
+		for(j = 0; j < rem.length; j++){
+			if(rem[j] != 0){
+				System.out.println("There is an error in the message received.");
+				return;
+			}
+		}
+
+		if(j == rem.length){
+			System.out.println("There is no error in the message received.");
+		}
+	}
+}
