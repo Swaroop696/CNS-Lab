@@ -1,0 +1,60 @@
+import java.util.*;
+public class Bellmann
+{
+    static int n, dest;
+    static double[] prevDistanceVector, distanceVector;
+    static double[][] a;
+    public static void main(String[] args) 
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of nodes");
+        n = sc.nextInt();
+        System.out.println("Enter destination vertex");
+        dest = sc.nextInt();
+        distanceVector=new double[100];
+        a=new double[100][100];
+        System.out.println("Enter Adjacency Matrix");
+        for (int i = 1; i<=n; i++)
+        {
+            for (int j = 1; j <= n; j++)
+            {
+                a[i][j]=sc.nextDouble();
+            }
+        }
+         for (int i = 1; i<=n; i++)
+         {
+             distanceVector[i] =999;
+         }
+        distanceVector[dest] = 0;
+        bellmanford();
+        System.out.println("Distance Vector");
+        for (int i = 1; i<=n; i++)
+        {
+            if (distanceVector[i]==0)
+            {
+                 continue;
+            }
+            System.out.println("Distance from " + i +" to " + dest + " is " + distanceVector[i]);
+         }
+        System.out.println();
+    }
+    static void bellmanford() 
+    {
+        for (int i = 1; i<= n - 1; i++) 
+        {
+            prevDistanceVector = distanceVector.clone();
+            for (int j = 1; j <= n; j++) 
+            {
+                double min = 999;
+                for (int k = 1; k <= n; k++) 
+                {
+                    if (min >a[j][k] + prevDistanceVector[k])
+                    {
+                        min = a[j][k] + prevDistanceVector[k];
+                    }
+                }
+                distanceVector[j] = min;
+            }
+        }
+    }
+}
