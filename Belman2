@@ -1,0 +1,32 @@
+import java.util.*;
+class Bford {
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter no. of nodes");
+        int n = sc.nextInt();
+        System.out.println("Enter CostMatrix");
+        int cost[][] = new int[n][n];
+        for(int i=0;i<n;i++)
+            for(int j=0;j<n;j++)
+            cost[i][j] = sc.nextInt();
+        System.out.println("Enter Destination");
+        int s = sc.nextInt();
+        int dist[] = new int[n];
+        for(int i=0;i<n;i++) dist[i] = 999;
+        dist[s-1] = 0;
+        for(int k=0;k<n-1;k++)
+        for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+        if(cost[i][j]!=999 && dist[i]+cost[i][j]<dist[j])
+        dist[j] = dist[i]+cost[i][j];
+        for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+        if(cost[i][j]!=999) {
+        if(dist[i]+cost[i][j]<dist[j])
+                    System.out.println("Graph contain -ve edge cycle!!!");
+                }
+        for(int i=0;i<n;i++)
+        System.out.print(dist[i]+" ");
+        System.out.println();
+    }
+}
